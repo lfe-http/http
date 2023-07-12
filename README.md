@@ -12,11 +12,23 @@
 ##### Table of Contents
 
 * [Features](#features-)
+* [Installation](#installation--)
 * [License](#license-)
 
 ## Features [&#x219F;](#table-of-contents)
 
 * HTTP codes: `(http.code:im-a-teapot)`
+
+## Installation [&#x219F;](#contents)
+
+Add it to your ``rebar.config`` deps:
+
+```erlang
+{deps, [
+  ...
+  {http, "0.1.0", {pkg, lfe_http}}
+]}.
+```
 
 ## License [&#x219F;](#table-of-contents)
 
