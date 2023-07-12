@@ -8,3 +8,11 @@
 
 (defun my-fun ()
   'hello-world)
+
+;;; Metadata
+
+(defun version ()
+  (http.vsn:get))
+
+(defun versions ()
+  (http.vsn:all))
