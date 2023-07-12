@@ -1,4 +1,4 @@
-(defmodule http.codes
+(defmodule http.code
   (export all))
 
 ; HTTP 1xx
