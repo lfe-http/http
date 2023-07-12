@@ -6,6 +6,3 @@
 ;;; -----------
 ;;; library API
 ;;; -----------
-
-(deftest my-fun
-  (is-equal 'hellow-orld (http:my-fun)))
