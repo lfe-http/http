@@ -16,7 +16,8 @@
     {"Hex", "https://hex.pm/packages/lfe_http"}
   ]},
   {exclude_files, [
+    "priv/html/*",
     "priv/images/*",
-    "priv/html/*"
+    "priv/mime-types"
   ]}
 ]}.
