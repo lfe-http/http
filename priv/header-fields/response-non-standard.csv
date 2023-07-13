@@ -1,0 +1,22 @@
+Field name,Description,Example
+Content-Security-Policy,Content Security Policy definition.,X-WebKit-CSP: default-src 'self'
+X-Content-Security-Policy,Content Security Policy definition.,X-WebKit-CSP: default-src 'self'
+X-WebKit-CSP,Content Security Policy definition.,X-WebKit-CSP: default-src 'self'
+Expect-CT,Notify to prefer to enforce Certificate Transparency.,"Expect-CT: max-age=604800, enforce, report-uri=""https://example.example/report"""
+NEL,Used to configure network request logging.,"NEL: { ""report_to"": ""name_of_reporting_group"", ""max_age"": 12345, ""include_subdomains"": false, ""success_fraction"": 0.0, ""failure_fraction"": 1.0 }"
+Permissions-Policy,To allow or disable different features or APIs of the browser.,"Permissions-Policy: fullscreen=(), camera=(), microphone=(), geolocation=(), interest-cohort=()"
+Refresh,"Used in redirection, or when a new resource has been created. This refresh redirects after 5 seconds. Header extension introduced by Netscape and supported by most web browsers. Defined by HTML Standard",Refresh: 5; url=http://www.w3.org/pub/WWW/People.html
+Report-To,Instructs the user agent to store reporting endpoints for an origin.,"Report-To: { ""group"": ""csp-endpoint"", ""max_age"": 10886400, ""endpoints"": [ { ""url"": ""https-url-of-site-which-collects-reports"" } ] }"
+Status,"CGI header field specifying the status of the HTTP response. Normal HTTP responses use a separate ""Status-Line"" instead, defined by RFC 9110.",Status: 200 OK
+Timing-Allow-Origin,"The Timing-Allow-Origin response header specifies origins that are allowed to see values of attributes retrieved via features of the Resource Timing API, which would otherwise be reported as zero due to cross-origin restrictions.","Timing-Allow-Origin: * Timing-Allow-Origin: <origin>[, <origin>]*"
+X-Content-Duration,Provide the duration of the audio or video in seconds; only supported by Gecko browsers,X-Content-Duration: 42.666
+X-Content-Type-Options,"The only defined value, ""nosniff"", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type. This also applies to Google Chrome, when downloading extensions.",X-Content-Type-Options: nosniff
+X-Powered-By,"Specifies the technology (e.g. ASP.NET, PHP, JBoss) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)",X-Powered-By: PHP/5.4.0
+X-Redirect-By,Specifies the component that is responsible for a particular redirect.,"X-Redirect-By: WordPress
+X-Redirect-By: Polylang"
+X-Request-ID,Correlates HTTP requests between a client and server.,X-Request-ID: f058ebd6-02f7-4d3f-942e-904344e8cde5
+X-Correlation-ID,Correlates HTTP requests between a client and server.,
+X-UA-Compatible,"Recommends the preferred rendering engine (often a backward-compatibility mode) to use to display the content. Also used to activate Chrome Frame in Internet Explorer. In HTML Standard, only the IE=edge value is defined.","X-UA-Compatible: IE=edge
+X-UA-Compatible: IE=EmulateIE7
+X-UA-Compatible: Chrome=1"
+X-XSS-Protection,Cross-site scripting (XSS) filter,X-XSS-Protection: 1; mode=block

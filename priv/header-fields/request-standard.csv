@@ -1,0 +1,42 @@
+Name,Description,Example,Status,Standard
+A-IM,Acceptable instance-manipulations for the request.,A-IM: feed,Permanent,RFC 3229
+Accept,Media type(s) that is/are acceptable for the response. See Content negotiation.,Accept: text/html,Permanent,RFC 9110
+Accept-Charset,Character sets that are acceptable.,Accept-Charset: utf-8,Permanent,RFC 9110
+Accept-Datetime,Acceptable version in time.,"Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT",Provisional,RFC 7089
+Accept-Encoding,List of acceptable encodings. See HTTP compression.,"Accept-Encoding: gzip, deflate",Permanent,RFC 9110
+Accept-Language,List of acceptable human languages for response. See Content negotiation.,Accept-Language: en-US,Permanent,RFC 9110
+Access-Control-Request-Method,Initiates a request for cross-origin resource sharing with Origin (below).,Access-Control-Request-Method: GET,Permanent: standard,
+Access-Control-Request-Headers,Initiates a request for cross-origin resource sharing with Origin (below).,,,
+Authorization,Authentication credentials for HTTP authentication.,Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==,Permanent,RFC 9110
+Cache-Control,Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.,Cache-Control: no-cache,Permanent,RFC 9111
+Connection,Control options for the current connection and list of hop-by-hop request fields. Must not be used with HTTP/2.,Connection: keep-alive Connection: Upgrade,Permanent,RFC 9110
+Content-Encoding,The type of encoding used on the data. See HTTP compression.,Content-Encoding: gzip,Permanent,RFC 9110
+Content-Length,The length of the request body in octets (8-bit bytes).,Content-Length: 348,Permanent,RFC 9110
+Content-MD5,A Base64-encoded binary MD5 sum of the content of the request body.,Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==,Obsolete,"RFC 1544, 1864, 4021"
+Content-Type,The Media type of the body of the request (used with POST and PUT requests).,Content-Type: application/x-www-form-urlencoded,Permanent,RFC 9110
+Cookie,An HTTP cookie previously sent by the server with Set-Cookie (below).,Cookie: $Version=1; Skin=new;,Permanent: standard,"RFC 2965, 6265"
+Date,"The date and time at which the message was originated (in ""HTTP-date"" format as defined by RFC 9110: HTTP Semantics, section 5.6.7 ""Date/Time Formats"").","Date: Tue, 15 Nov 1994 08:12:31 GMT",Permanent,RFC 9110
+Expect,Indicates that particular server behaviors are required by the client.,Expect: 100-continue,Permanent,RFC 9110
+Forwarded,Disclose original information of a client connecting to a web server through an HTTP proxy.,"Forwarded: for=192.0.2.60;proto=http;by=203.0.113.43 Forwarded: for=192.0.2.43, for=198.51.100.17",Permanent,RFC 7239
+From,The email address of the user making the request.,From: user@example.com,Permanent,RFC 9110
+Host,"The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening. The port number may be omitted if the port is the standard port for the service requested. Mandatory since HTTP/1.1. If the request is generated directly in HTTP/2, it should not be used.",Host: en.wikipedia.org:8080 Host: en.wikipedia.org,,
+HTTP2-Settings,"A request that upgrades from HTTP/1.1 to HTTP/2 MUST include exactly one HTTP2-Settings header field. The HTTP2-Settings header field is a connection-specific header field that includes parameters that govern the HTTP/2 connection, provided in anticipation of the server accepting the request to upgrade.",HTTP2-Settings: token64,Obsolete,"RFC 7540, 9113"
+If-Match,Only perform the action if the client supplied entity matches the same entity on the server. This is mainly for methods like PUT to only update a resource if it has not been modified since the user last updated it.,"If-Match: ""737060cd8c284d8af7ad3082f209582d""",Permanent,RFC 9110
+If-Modified-Since,Allows a 304 Not Modified to be returned if content is unchanged.,"If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT",Permanent,RFC 9110
+If-None-Match,"Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.","If-None-Match: ""737060cd8c284d8af7ad3082f209582d""",Permanent,RFC 9110
+If-Range,"If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.","If-Range: ""737060cd8c284d8af7ad3082f209582d""",Permanent,RFC 9110
+If-Unmodified-Since,Only send the response if the entity has not been modified since a specific time.,"If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT",Permanent,RFC 9110
+Max-Forwards,Limit the number of times the message can be forwarded through proxies or gateways.,Max-Forwards: 10,Permanent,RFC 9110
+Origin,Initiates a request for cross-origin resource sharing (asks server for Access-Control-* response fields).,Origin: http://www.example-social-network.com,Permanent: standard,RFC 6454
+Pragma,Implementation-specific fields that may have various effects anywhere along the request-response chain.,Pragma: no-cache,Permanent,RFC 9111
+Prefer,Allows client to request that certain behaviors be employed by a server while processing a request.,Prefer: return=representation,Permanent,RFC 7240
+Proxy-Authorization,Authorization credentials for connecting to a proxy.,Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==,Permanent,RFC 9110
+Range,Request only part of an entity. Bytes are numbered from 0. See Byte serving.,Range: bytes=500-999,Permanent,RFC 9110
+Referer,"This is the address of the previous web page from which a link to the currently requested page was followed. (The word ""referrer"" has been misspelled in the RFC as well as in most implementations to the point that it has become standard usage and is considered correct terminology)",Referer: http://en.wikipedia.org/wiki/Main_Page,Permanent,RFC 9110
+TE,"The transfer encodings the user agent is willing to accept: the same values as for the response header field Transfer-Encoding can be used, plus the ""trailers"" value (related to the ""chunked"" transfer method) to notify the server it expects to receive additional fields in the trailer after the last, zero-sized, chunk. Only trailers is supported in HTTP/2.","TE: trailers, deflate",Permanent,RFC 9110
+Trailer,The Trailer general field value indicates that the given set of header fields is present in the trailer of a message encoded with chunked transfer coding.,Trailer: Max-Forwards,Permanent,RFC 9110
+Transfer-Encoding,"The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity. Must not be used with HTTP/2.",Transfer-Encoding: chunked,Permanent,RFC 9110
+User-Agent,The user agent string of the user agent.,User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0,Permanent,RFC 9110
+Upgrade,Ask the server to upgrade to another protocol. Must not be used in HTTP/2.,"Upgrade: h2c, HTTPS/1.3, IRC/6.9, RTA/x11, websocket",Permanent,RFC 9110
+Via,Informs the server of proxies through which the request was sent.,"Via: 1.0 fred, 1.1 example.com (Apache/1.1)",Permanent,RFC 9110
+Warning,A general warning about possible problems with the entity body.,Warning: 199 Miscellaneous warning,Obsolete,"RFC 7234, 9111"
