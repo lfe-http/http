@@ -17,7 +17,9 @@
 
 ## Features [&#x219F;](#table-of-contents)
 
-* HTTP codes: `(http.code:im-a-teapot)`
+* Status codes: `(http.code:im-a-teapot)`
+* Request map: `(http.request:new 'GET "http://example.com")`
+* Headers: `(http.header:list->map (#(content-type #"text/plain")))`
 
 ## Installation [&#x219F;](#contents)
 
@@ -26,7 +28,7 @@ Add it to your ``rebar.config`` deps:
 ```erlang
 {deps, [
   ...
-  {http, "0.1.0", {pkg, lfe_http}}
+  {http, "0.2.0", {pkg, lfe_http}}
 ]}.
 ```
 
