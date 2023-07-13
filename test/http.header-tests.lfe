@@ -1,10 +1,10 @@
-(defmodule http-tests
+(defmodule http.header-tests
   (behaviour ltest-unit))
 
 (include-lib "ltest/include/ltest-macros.lfe")
 
 (deftest add
-  (let ((hdrs (http.header:make)))
+  (let ((hdrs (http.header:new)))
     (let ((hdrs (http.header:add hdrs #"content-type" #"text/plain")))
       (is-equal #"text/plain" (maps:get #"content-type" hdrs))
       (is-equal '(#"content-type") (maps:keys hdrs)))

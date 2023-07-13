@@ -1,8 +1,8 @@
 (defmodule http.header
   (export
    (add 2) (add 3)
-   (make 0)
-   (list->map 1)))
+   (list->map 1)
+   (new 0)))
 
 (defun add (header-map kv)
    (let ((`#(,k ,v) (kv->bins kv)))
@@ -11,7 +11,7 @@
 (defun add (header-map k v)
   (add header-map `#(,k ,v)))
 
-(defun make ()
+(defun new ()
   `#m())
 
 (defun list->map (proplist)
