@@ -2,7 +2,8 @@
   (export
    (default-headers 0)
    (default-version 0)
-   (methods 0)))
+   (methods 0)
+   (versions 0)))
 
 ;;; -----------
 ;;; library API
