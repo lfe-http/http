@@ -1,7 +1,19 @@
-(defmodule http.mimetypes
+;;;; *** WARNING! ***
+;;;;
+;;;; The code below was generated automatically and should never be edited.
+;;;; If you would like to make make a change, instead change the code that
+;;;; generated it.
+;;;;
+;;;; In particular, see the following files
+;;;; * ./scripts/gen.lfe
+;;;; * ./priv/tooling/*.lfe
+;;;; * ./priv/header-fields/*.csv
+;;;; * ./priv/mime-types/*.csv
+;;;;
+(defmodule http.mimetype
   (export all))
 
-;;; text
+;;; text mime-types 
 
 (defun text/1d-interleaved-parityfec () "text/1d-interleaved-parityfec")
 (defun text/cache-manifest () "text/cache-manifest")
@@ -97,7 +109,7 @@
 (defun text/xml () "text/xml")
 (defun text/xml-external-parsed-entity () "text/xml-external-parsed-entity")
 
-;;; image
+;;; image mime-types 
 
 (defun image/aces () "image/aces")
 (defun image/apng () "image/apng")
@@ -179,7 +191,7 @@
 (defun image/webp () "image/webp")
 (defun image/wmf () "image/wmf")
 
-;;; message
+;;; message mime-types 
 
 (defun message/bhttp () "message/bhttp")
 (defun message/CPIM () "message/CPIM")
@@ -207,7 +219,7 @@
 (defun message/vnd.si.simp () "message/vnd.si.simp")
 (defun message/vnd.wfa.wsc () "message/vnd.wfa.wsc")
 
-;;; font
+;;; font mime-types 
 
 (defun font/collection () "font/collection")
 (defun font/otf () "font/otf")
@@ -216,7 +228,7 @@
 (defun font/woff () "font/woff")
 (defun font/woff2 () "font/woff2")
 
-;;; audio
+;;; audio mime-types 
 
 (defun audio/1d-interleaved-parityfec () "audio/1d-interleaved-parityfec")
 (defun audio/32kadpcm () "audio/32kadpcm")
@@ -377,7 +389,7 @@
 (defun audio/vorbis () "audio/vorbis")
 (defun audio/vorbis-config () "audio/vorbis-config")
 
-;;; video
+;;; video mime-types 
 
 (defun video/1d-interleaved-parityfec () "video/1d-interleaved-parityfec")
 (defun video/3gpp () "video/3gpp")
@@ -469,7 +481,7 @@
 (defun video/VP8 () "video/VP8")
 (defun video/VP9 () "video/VP9")
 
-;;; model
+;;; model mime-types 
 
 (defun model/3mf () "model/3mf")
 (defun model/e57 () "model/e57")
@@ -513,7 +525,7 @@
 (defun model/x3d+fastinfoset () "model/x3d+fastinfoset")
 (defun model/x3d+xml () "model/x3d+xml")
 
-;;; application
+;;; application mime-types 
 
 (defun application/1d-interleaved-parityfec () "application/1d-interleaved-parityfec")
 (defun application/3gpdash-qoe-report+xml () "application/3gpdash-qoe-report+xml")
@@ -2069,7 +2081,7 @@
 (defun application/zlib () "application/zlib")
 (defun application/zstd () "application/zstd")
 
-;;; multipart
+;;; multipart mime-types 
 
 (defun multipart/alternative () "multipart/alternative")
 (defun multipart/appledouble () "multipart/appledouble")
