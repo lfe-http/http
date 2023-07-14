@@ -5,7 +5,7 @@
 (defun show-help ()
   "Usage:
 
-  rebar3 as script lfe run -- <gen-target>
+  rebar3 as script lfe run -- <arg>
 
 Description:
 
@@ -13,9 +13,9 @@ Description:
   constants (functions, in LFE) defined and ready for use by this `http`
   library.
 
-Targets:
+Valid arguments:
 
-  The following generation targets (arguments) are accepted:
+  The following generation arguments are accepted:
 
   list-targets - this will output the list of supported generation targets.
 
