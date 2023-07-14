@@ -17,9 +17,10 @@
 
 ## Features [&#x219F;](#table-of-contents)
 
-* Status codes: `(http.code:im-a-teapot)`
-* Request map: `(http.request:new 'GET "http://example.com")`
+* Request maps: `(http.request:new 'GET "http://example.com")`
 * Headers: `(http.header:list->map (#(content-type #"text/plain")))`
+* +150 status codes: `(http.status:im-a-teapot)`
+* +2000 mime types: `(http.mimetype:application/json))`
 
 ## Installation [&#x219F;](#contents)
 
