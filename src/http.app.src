@@ -1,6 +1,6 @@
 {application, 'http', [
   {description, "General purpose data, functions, and utilties for use by LFE/Erlang HTTP clients, servers, URL-parsers, web frameworks, etc."},
-  {vsn, "0.2.0"},
+  {vsn, "0.2.1"},
   {registered, []},
   {applications, [
     kernel,
