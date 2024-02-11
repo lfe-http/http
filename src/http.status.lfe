@@ -127,6 +127,8 @@
 (defun reserved-for-chuck-norris () 749)
 ; 75X - Syntax Errors
 (defun didnt-bother-to-compile-it () 750)
+(defun not-enough-parens () 751)
+(defun too-many-parens () 752)
 (defun syntax-error () 753)
 (defun too-many-semi-colons () 754)
 (defun not-enough-semi-colons () 755)
