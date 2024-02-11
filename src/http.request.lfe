@@ -8,6 +8,7 @@
   ((url)
    `#m(method 'undefined
        version ,(http:default-version)
+       remote-addr #"",
        headers ,(http:default-headers)
        body #""
        url ,url
