@@ -8,7 +8,7 @@
    (new (list_to_binary url)))
   ((url)
    (let ((parsed-url (yuri:parse url)))
-     `#m(method GET
+     `#m(method get
          version ,(http:default-version)
          remote-addr #""
          headers ,(http:default-headers)

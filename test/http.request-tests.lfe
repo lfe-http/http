@@ -6,26 +6,9 @@
 (deftest new-1
   (let* ((req (http.request:new "http://example.com/"))
          (sorted (http.request:to-list req)))
-    ; (is-equal #"" (proplists:get_value 'body sorted))
-    ; (is-equal '() (proplists:get_value 'headers sorted))
-    ; (is-equal 'GET (proplists:get_value 'method sorted))
-    ; (is-equal '(#(fragment #"")
-    ;             #(host #"example.com")
-    ;             #(password #"")
-    ;             #(path #"/")
-    ;             #(port #"")
-    ;             #(query #"")
-    ;             #(scheme #"http")
-    ;             #(user #"")
-    ;             #(userinfo #""))
-    ;          (proplists:get_value 'url-parsed sorted))
-    ; (is-equal '() (proplists:get_value 'path-segments sorted))
-    ; (is-equal '() (proplists:get_value 'query-parsed sorted))
-    ; (is-equal #"http://example.com/" (proplists:get_value 'url sorted))
-    ; (is-equal 1.1 (proplists:get_value 'version sorted))
     (is-equal '(#(body #"")
                 #(headers ())
-                #(method GET)
+                #(method get)
                 #(path-segments ())
                 #(query-parsed ())
                 #(remote-addr #"")
@@ -40,15 +23,14 @@
                               #(user #"")
                               #(userinfo #"")))
                 #(version 1.1))
-              sorted)
-              ))
+              sorted)))
 
 (deftest new-2
-  (let* ((req (http.request:new 'POST "http://example.com/"))
+  (let* ((req (http.request:new 'post "http://example.com/"))
          (sorted (http.request:to-list req)))
     (is-equal '(#(body #"")
                 #(headers ())
-                #(method POST)
+                #(method post)
                 #(path-segments ())
                 #(query-parsed ())
                 #(remote-addr #"")
@@ -66,11 +48,11 @@
               sorted)))
 
 (deftest new-3
-  (let* ((req (http.request:new 'POST "http://example.com/" #"stuff"))
+  (let* ((req (http.request:new 'post "http://example.com/" #"stuff"))
          (sorted (http.request:to-list req)))
     (is-equal '(#(body #"stuff")
                 #(headers ())
-                #(method POST)
+                #(method post)
                 #(path-segments ())
                 #(query-parsed ())
                 #(remote-addr #"")
@@ -88,14 +70,14 @@
               sorted)))
 
 (deftest new-4
-  (let* ((req (http.request:new 'POST
+  (let* ((req (http.request:new 'post
                                 "http://example.com/"
                                 #"stuff"
                                 #m(content-type #"application/json")))
          (sorted (http.request:to-list req)))
     (is-equal '(#(body #"stuff")
                 #(headers (#(content-type #"application/json")))
-                #(method POST)
+                #(method post)
                 #(path-segments ())
                 #(query-parsed ())
                 #(remote-addr #"")
@@ -114,13 +96,13 @@
 
 (deftest new
   (let* ((req (maps:merge
-               (http.request:new 'PUT
+               (http.request:new 'put
                                  "http://alice.roberts:sekr1t@example.com:5099/api/v1/thing?q=wut&flag=enabled#start")
                #m(remote-addr #"172.16.32.42")))
          (sorted (http.request:to-list req)))
     (is-equal '(#(body #"")
                 #(headers ())
-                #(method PUT)
+                #(method put)
                 #(path-segments (#"api" #"v1" #"thing"))
                 #(query-parsed (#(#"flag" #"enabled") #(#"q" #"wut")))
                 #(remote-addr #"172.16.32.42")

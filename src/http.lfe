@@ -16,13 +16,14 @@
   1.1)
 
 (defun methods ()
-  '(DELETE
-    GET
-    HEAD
-    OPTIONS
-    POST
-    PUT
-    TRACE))
+  '(delete
+    get
+    head
+    options
+    patch
+    post
+    put
+    trace))
 
 (defun versions ()
   '(0.9
