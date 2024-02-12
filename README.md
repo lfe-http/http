@@ -1,18 +1,18 @@
 # http
 
 [![Build Status][gh-actions-badge]][gh-actions]
-[![LFE Versions][lfe badge]][lfe]
-[![Erlang Versions][erlang badge]][versions]
-[![Tags][github tags badge]][github tags]
+[![LFE Versions][lfe-badge]][lfe]
+[![Erlang Versions][erlang-badge]][versions]
+[![Tags][github-tags-badge]][github-tags]
 
-*General purpose data, functions, and utilties for use by LFE HTTP clients, servers, URL-parsers, web frameworks, etc.*
+*General purpose data, functions, and utilities for use by LFE HTTP clients, servers, URL-parsers, web frameworks, etc.*
 
 [![Project Logo][logo]][logo-large]
 
 ##### Table of Contents
 
 * [Features](#features-)
-* [Installation](#installation--)
+* [Installation](#installation-)
 * [License](#license-)
 
 ## Features [&#x219F;](#table-of-contents)
@@ -22,7 +22,7 @@
 * +150 status codes: `(http.status:im-a-teapot)`
 * +2000 mime types: `(http.mimetype:application/json))`
 
-## Installation [&#x219F;](#contents)
+## Installation [&#x219F;](#table-of-contents)
 
 Add it to your ``rebar.config`` deps:
 
@@ -46,8 +46,8 @@ Copyright © 2023, Duncan McGreggor <oubiwann@gmail.com>.
 [gh-actions-badge]: https://github.com/lfex/http/workflows/ci%2Fcd/badge.svg
 [gh-actions]: https://github.com/lfex/http/actions
 [lfe]: https://github.com/lfe/lfe
-[lfe badge]: https://img.shields.io/badge/lfe-2.1-blue.svg
-[erlang badge]: https://img.shields.io/badge/erlang-21%20to%2026-blue.svg
+[lfe-badge]: https://img.shields.io/badge/lfe-2.1-blue.svg
+[erlang-badge]: https://img.shields.io/badge/erlang-21%20to%2026-blue.svg
 [versions]: https://github.com/lfex/http/blob/master/.github/workflows/cicd.yml
-[github tags]: https://github.com/lfex/http/tags
-[github tags badge]: https://img.shields.io/github/tag/lfex/http.svg
+[github-tags]: https://github.com/lfex/http/tags
+[github-tags-badge]: https://img.shields.io/github/tag/lfex/http.svg
