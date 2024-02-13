@@ -56,7 +56,7 @@
   (->erlang
     req
     ;; default Erlang httpc `HttpOptions`
-    `(#(version ,(http.request:http-version req)))
+    `(#(version ,(http.util:http-version req)))
     ;; default Erlang httpc `Options`
     `(#(sync true) #(full_result true))))
 
