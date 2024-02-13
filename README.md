@@ -19,6 +19,7 @@
 
 * Request maps: `(http.request:new 'get "http://example.com")`
 * Headers: `(http.header:list->map (#(content-type #"text/plain")))`
+* Interoperability with the Erlang stdlib `httpc` library: `(http.c:request "http://google.com")`
 * +150 status codes: `(http.status:im-a-teapot)`
 * +2000 mime types: `(http.mimetype:application/json))`
 
@@ -29,7 +30,7 @@ Add it to your ``rebar.config`` deps:
 ```erlang
 {deps, [
   ...
-  {http, "0.3.0", {pkg, lfe_http}}
+  {http, "0.4.0", {pkg, lfe_http}}
 ]}.
 ```
 
@@ -37,7 +38,7 @@ Add it to your ``rebar.config`` deps:
 
 Apache License, Version 2.0
 
-Copyright © 2023, Duncan McGreggor <oubiwann@gmail.com>.
+Copyright © 2023-2024, Duncan McGreggor <oubiwann@gmail.com>.
 
 [//]: ---Named-Links---
 
