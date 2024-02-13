@@ -18,6 +18,7 @@
 ## Features [&#x219F;](#table-of-contents)
 
 * Request maps: `(http.request:new 'get "http://example.com")`
+* Response maps: `(http.response:new 200 #m(#"content-type" #"text-plain") #"")`
 * Headers: `(http.header:list->map '(#(content-type #"text/plain")))`
 * Interoperability with the Erlang stdlib `httpc` library: `(http.c:request "http://google.com")`
 * +150 status codes: `(http.status:im-a-teapot)`
