@@ -5,8 +5,8 @@
    (new 0)))
 
 (defun add (header-map kv)
-   (let ((`#(,k ,v) (kv->bins kv)))
-     (maps:put k v header-map)))
+  (let ((`#(,k ,v) (kv->bins kv)))
+    (maps:put k v header-map)))
 
 (defun add (header-map k v)
   (add header-map `#(,k ,v)))

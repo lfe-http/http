@@ -1,7 +1,7 @@
 (defmodule http.request
- (export
-  (->list 1)
-  (new 1) (new 2) (new 3) (new 4)))
+  (export
+   (->list 1)
+   (new 1) (new 2) (new 3) (new 4)))
 
 (defun new
   ((url) (when (is_list url))

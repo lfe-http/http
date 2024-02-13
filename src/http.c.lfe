@@ -1,10 +1,10 @@
 ;;;; This module povides interoperability between the LFE HTP library and the
 ;;;; Erlang stdlib httpc HTTP client library.
 (defmodule http.c
- (export
-  (->erlang 1) (->erlang 3)
-  (erlang-> 1)
-  (request 1) (request 2) (request 3) (request 4) (request 5) (request 6)))
+  (export
+   (->erlang 1) (->erlang 3)
+   (erlang-> 1)
+   (request 1) (request 2) (request 3) (request 4) (request 5) (request 6)))
 
 (defun request (url)
   (case (apply #'httpc:request/4
@@ -29,8 +29,8 @@
 
 (defun request (method url body headers)
   (case (apply #'httpc:request/4
-              (->erlang
-               (http.request:new method url body headers)))
+               (->erlang
+                (http.request:new method url body headers)))
     (`#(ok ,r) (erlang-> r))
     (err err)))
 
@@ -54,11 +54,11 @@
   "Convert an LFE HTTP library request to args that can be supplied to Erlang's
   `httpc:request/4` function."
   (->erlang
-    req
-    ;; default Erlang httpc `HttpOptions`
-    `(#(version ,(http.util:http-version req)))
-    ;; default Erlang httpc `Options`
-    `(#(sync true) #(full_result true))))
+   req
+   ;; default Erlang httpc `HttpOptions`
+   `(#(version ,(http.util:http-version req)))
+   ;; default Erlang httpc `Options`
+   `(#(sync true) #(full_result true))))
 
 (defun ->erlang (req http-options options)
   (->erlang (mref req 'method) req http-options options))
@@ -99,17 +99,17 @@
     (list
      method
      `#(,(mref req 'url)
-         ,(maps:to_list headers))
-      http-options
-      options)))
+        ,(maps:to_list headers))
+     http-options
+     options)))
 
 (defun ->erlang-with-body (method req http-options options)
   (let ((headers (mref req 'headers)))
     (list
      method
      `#(,(mref req 'url)
-         ,(maps:to_list headers)
-         ,(binary_to_list (maps:get #"Content-Type" headers (http.mimetype:text/html)))
-         ,(mref req 'body))
-      http-options
-      (lists:append options '(#(body_format binary))))))
+        ,(maps:to_list headers)
+        ,(binary_to_list (maps:get #"Content-Type" headers (http.mimetype:text/html)))
+        ,(mref req 'body))
+     http-options
+     (lists:append options '(#(body_format binary))))))
