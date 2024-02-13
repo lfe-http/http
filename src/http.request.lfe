@@ -46,9 +46,7 @@
 
 (defun ->erlang (req)
   "Convert an LFE HTTP library request to args that can be supplied to Erlang's
-  `httpc:request/4` function.
-
-  `options` is "
+  `httpc:request/4` function."
   (->erlang
     req
     `(#(version ,(http-version req)))   ; default `HttpOptions`
