@@ -5,7 +5,7 @@
 
 (deftest new-1
   (let* ((req (http.request:new "http://example.com/"))
-         (sorted (http.request:to-list req)))
+         (sorted (http.request:->list req)))
     (is-equal '(#(body #"")
                 #(headers ())
                 #(method get)
@@ -27,7 +27,7 @@
 
 (deftest new-2
   (let* ((req (http.request:new 'post "http://example.com/"))
-         (sorted (http.request:to-list req)))
+         (sorted (http.request:->list req)))
     (is-equal '(#(body #"")
                 #(headers ())
                 #(method post)
@@ -49,7 +49,7 @@
 
 (deftest new-3
   (let* ((req (http.request:new 'post "http://example.com/" #"stuff"))
-         (sorted (http.request:to-list req)))
+         (sorted (http.request:->list req)))
     (is-equal '(#(body #"stuff")
                 #(headers ())
                 #(method post)
@@ -74,7 +74,7 @@
                                 "http://example.com/"
                                 #"stuff"
                                 #m(content-type #"application/json")))
-         (sorted (http.request:to-list req)))
+         (sorted (http.request:->list req)))
     (is-equal '(#(body #"stuff")
                 #(headers (#(content-type #"application/json")))
                 #(method post)
@@ -99,7 +99,7 @@
                (http.request:new 'put
                                  "http://alice.roberts:sekr1t@example.com:5099/api/v1/thing?q=wut&flag=enabled#start")
                #m(remote-addr #"172.16.32.42")))
-         (sorted (http.request:to-list req)))
+         (sorted (http.request:->list req)))
     (is-equal '(#(body #"")
                 #(headers ())
                 #(method put)
