@@ -10,7 +10,7 @@
   (new (http.status:ok) body))
 
 (defun new (status body)
-  (new status '() body))
+  (new status (http:default-headers) body))
 
 (defun new (status headers body)
   `#m(status ,status
