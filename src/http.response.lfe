@@ -1,5 +1,6 @@
 (defmodule http.response
   (export
+   (add-header 3)
    (new 0) (new 1) (new 2) (new 3)))
 
 (defun new ()
@@ -15,3 +16,6 @@
   `#m(status ,status
       headers ,headers
       body ,body))
+
+(defun add-header (resp k v)
+  (http.util:add-header resp k v))

@@ -1,6 +1,7 @@
 (defmodule http.request
   (export
    (->list 1)
+   (add-header 3)
    (new 1) (new 2) (new 3) (new 4)))
 
 (defun new
@@ -42,3 +43,6 @@
                                    query-parsed ,(lists:sort (maps:to_list q))
                                    url-parsed ,(lists:sort (maps:to_list u))))))
     (lists:sort (maps:to_list req2))))
+
+(defun add-header (req k v)
+  (http.util:add-header req k v))
