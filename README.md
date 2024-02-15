@@ -31,7 +31,7 @@ Add it to your ``rebar.config`` deps:
 ```erlang
 {deps, [
   ...
-  {http, "0.5.1", {pkg, lfe_http}}
+  {http, "0.5.3", {pkg, lfe_http}}
 ]}.
 ```
 
