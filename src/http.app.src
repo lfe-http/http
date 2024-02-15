@@ -9,10 +9,11 @@
   {env,[]},
   {modules, []},
 
+  %% Package metadata
   {pkg_name, lfe_http},
   {licenses, ["Apache 2.0"]},
   {links, [
-    {"GitHub", "https://github.com/lfex/http"},
+    {"GitHub", "https://github.com/lfe-http/http"},
     {"Hex", "https://hex.pm/packages/lfe_http"}
   ]},
   {exclude_files, [
