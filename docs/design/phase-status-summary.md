@@ -10,10 +10,10 @@ This document provides a quick overview of all development phases. For detailed 
 
 | Phase | Name | Time | Dependencies | Status |
 |-------|------|------|--------------|--------|
-| 0 | Context & Overview | Reference | None | ✅ Ready |
-| 1 | Core Infrastructure | 2-3h | None | 📋 Ready to start |
-| 2 | Header Management | 2-3h | Phase 1 | ⏳ Waiting |
-| 3 | Request Builder | 3-4h | Phase 1, 2 | ⏳ Waiting |
+| 0 | Context & Overview | Reference | None | ✅ Complete |
+| 1 | Core Infrastructure | 2-3h | None | ✅ Complete |
+| 2 | Header Management | 2-3h | Phase 1 | ✅ Complete |
+| 3 | Request Builder | 3-4h | Phase 1, 2 | 📋 Ready to start |
 | 4 | Response Builder | 2-3h | Phase 1, 2 | ⏳ Waiting |
 | 5 | Status Enhancement | 1-2h | Phase 1 | ⏳ Waiting |
 | 6 | Erlang Interop | 3-4h | Phase 1-4 | ⏳ Waiting |
@@ -67,52 +67,115 @@ Let me know when you need clarification or encounter issues.
 
 ---
 
+## Completed Phases - Implementation Notes
+
+### Phase 1: Core Infrastructure ✅
+
+**Completed**: October 2025
+**Files Implemented**:
+
+- `http.util.lfe` - Binary utilities, conversions, case operations
+- `http.lfe` - Core module with method validation, default headers/version
+- `http.mimetype.lfe` - MIME type management
+- `http.status.lfe` - HTTP status codes and messages
+- `http.vsn.lfe` - Version information
+
+**Key Achievements**:
+
+- Binary-first utilities established
+- Single-pass conversion patterns
+- Method validation with binary support
+- Foundation for all subsequent phases
+
+**Tests**: All passing (22 tests in http-tests module)
+
+### Phase 2: Header Management ✅
+
+**Completed**: October 2025
+**Files Implemented**:
+
+- `http.header.lfe` - Header management with case-insensitive operations
+- `http.header-tests.lfe` - Comprehensive test suite (25 tests)
+
+**Key Achievements**:
+
+- Replaced recursive conversions with single-pass `lists:foldl`
+- Implemented case-insensitive operations using options maps: `#m(case-insensitive true)`
+- API follows LFE idioms (no `-ci` suffixed functions, uses options instead)
+- Functions exported: `new/0`, `add/2`, `add/3`, `from-list/1`, `list->map/1`, `to-list/1`, `get/2-4`, `has-key?/2-3`, `merge/2`, `filter/2`, `remove/2`, `keys/1`, `values/1`, `normalize-key/1`
+- Benchmark files: `header-bench.lfe`, `util-bench.lfe` (moved to src/)
+
+**Implementation Details**:
+
+- Used `get/3` and `get/4` instead of separate `get-ci` functions
+- Used `has-key?/2` and `has-key?/3` instead of `has-key-ci?`
+- Options map pattern: `(= #m(case-insensitive true) opts)` in function clauses
+- Helper functions: `find-key/2` for case-insensitive key lookup
+
+**Tests**: All passing (25 tests including legacy API, case-sensitive, case-insensitive, bulk operations)
+
+**Related Fixes**:
+
+- Fixed `http.request` module to use empty headers by default instead of default headers
+- All http.request-tests passing (5 tests)
+
+---
+
 ## Phase Summaries
 
 ### Phase 0: Context & Overview
+
 - **Purpose**: Master reference document
 - **Read**: Always read this first when starting or after context reset
 - **Contents**: Architecture, principles, patterns, pitfalls
 
 ### Phase 1: Core Infrastructure
+
 - **Files**: `http.util.lfe`, `http.lfe`, `http.mimetype.lfe`
 - **Creates**: Binary utilities, method macros, MIME types
 - **Key**: Foundation for all other phases
 
 ### Phase 2: Header Management
+
 - **Files**: `http.header.lfe`
 - **Replaces**: Recursive conversions with single-pass
 - **Adds**: Case-insensitive lookups
 - **Target**: 50-70% performance improvement
 
 ### Phase 3: Request Builder
+
 - **Files**: `http.request.lfe`
 - **Optimizes**: Request construction
 - **Adds**: Builder pattern, content-type helpers
 - **Target**: 40-60% fewer allocations
 
 ### Phase 4: Response Builder
+
 - **Files**: `http.response.lfe`
 - **Adds**: Convenience builders (`ok`, `error`, `json`, etc.)
 - **Optimizes**: Body setting
 
 ### Phase 5: Status Enhancement
+
 - **Files**: `http.status.lfe`
 - **Adds**: Macros for status codes
 - **Keeps**: All existing functions for compatibility
 
 ### Phase 6: Erlang Interop
+
 - **Files**: `http.c.lfe`
 - **Critical**: Most complex module
 - **Optimizes**: Binary method dispatch, single-pass conversion
 - **Target**: 30-40% faster
 
 ### Phase 7: Testing & Benchmarks
+
 - **Creates**: Complete test suite
 - **Includes**: Unit, integration, property-based tests
 - **Validates**: Performance targets met
 
 ### Phase 8: Documentation
+
 - **Creates**: Migration guide, API docs, examples
 - **Includes**: UPGRADING.md, migration script
 - **Finalizes**: Ready for release
@@ -122,6 +185,7 @@ Let me know when you need clarification or encounter issues.
 ## Critical Rules (Reminder)
 
 ### Always Use Binaries
+
 ```lfe
 ;; ✅ CORRECT
 #"GET"
@@ -135,6 +199,7 @@ Let me know when you need clarification or encounter issues.
 ```
 
 ### Single-Pass Operations
+
 ```lfe
 ;; ✅ CORRECT
 (lists:foldl #'convert/2 #m() list)
@@ -144,6 +209,7 @@ Let me know when you need clarification or encounter issues.
 ```
 
 ### Direct Map Construction
+
 ```lfe
 ;; ✅ CORRECT
 #m(method #"GET"
@@ -170,6 +236,7 @@ Let me know when you need clarification or encounter issues.
 ## Testing Strategy
 
 ### Per Phase
+
 ```bash
 # After each phase
 rebar3 eunit
@@ -178,6 +245,7 @@ rebar3 eunit
 ```
 
 ### After All Phases
+
 ```bash
 # Run complete suite
 ./test/run-all-tests.sh
@@ -229,23 +297,27 @@ git tag v1.0.0
 ## Troubleshooting
 
 ### Compilation Errors
+
 1. Check binary literals (missing `#`)
 2. Verify all pattern matches use binaries
 3. Check guard clauses
 
 ### Test Failures
+
 1. Review test expectations
 2. Check conversions are working
 3. Verify map structures
 4. Run individual test: `rebar3 eunit --module=MODULE`
 
 ### Performance Issues
+
 1. Check inline directives are present
 2. Verify single-pass operations
 3. Run profiler: `eprof:profile(...)`
 4. Compare benchmarks
 
 ### Context Lost
+
 1. Read Phase 0 first
 2. Check git tags to see completed phases
 3. Read last completed phase document
@@ -270,24 +342,28 @@ For Claude Code, download these files:
 ## Success Indicators
 
 ### Code Quality
+
 - ✅ Zero compiler warnings
 - ✅ All tests passing
 - ✅ No dialyzer errors
 - ✅ Consistent code style
 
 ### Performance
+
 - ✅ Header operations 50%+ faster
 - ✅ Request construction 40%+ fewer allocations
 - ✅ Method dispatch 30%+ faster
 - ✅ Overall improvement 25%+ minimum
 
 ### Documentation
+
 - ✅ All functions have docstrings
 - ✅ Migration guide complete
 - ✅ Examples work as documented
 - ✅ README updated
 
 ### Testing
+
 - ✅ Unit tests: 90%+ coverage
 - ✅ Integration tests passing
 - ✅ Property tests passing
@@ -376,7 +452,8 @@ Phase 1 (Core Infrastructure)
 
 ### By Week (assuming 2-3 hours/day)
 
-**Week 1**: 
+**Week 1**:
+
 - Mon: Phase 0 + Phase 1
 - Tue: Phase 2
 - Wed: Phase 3
@@ -384,6 +461,7 @@ Phase 1 (Core Infrastructure)
 - Fri: Phase 6
 
 **Week 2**:
+
 - Mon-Wed: Phase 7
 - Thu-Fri: Phase 8
 
@@ -392,21 +470,27 @@ Phase 1 (Core Infrastructure)
 ## Common Questions
 
 ### Q: Can I skip Phase 0?
+
 **A**: No! Always read Phase 0 first, especially after context resets.
 
 ### Q: Can I do phases in parallel?
+
 **A**: No. Follow the dependency order strictly.
 
 ### Q: What if a phase takes longer?
+
 **A**: That's fine. The estimates are guidelines. Quality over speed.
 
 ### Q: Can I modify the approach in a phase?
+
 **A**: Stick to the plan unless you find a critical issue. Document any deviations.
 
 ### Q: What if tests fail?
+
 **A**: Don't proceed to the next phase. Fix tests first.
 
 ### Q: How do I know if performance targets are met?
+
 **A**: Run benchmarks and compare with target percentages in the phase doc.
 
 ---
@@ -466,7 +550,7 @@ After v1.0.0 release:
 
 1. **Publish to Hex**: `rebar3 hex publish`
 2. **Update GitHub**: Push tags and release notes
-3. **Announce**: 
+3. **Announce**:
    - LFE mailing list
    - GitHub discussions
    - Social media
@@ -570,20 +654,24 @@ If you're using this library in other projects:
 ## Resources
 
 ### LFE Documentation
-- https://lfe.io/
-- https://lfe.io/books/tutorial/
-- https://lfe.io/reference/lfe-docs/
+
+- <https://lfe.io/>
+- <https://lfe.io/books/tutorial/>
+- <https://lfe.io/reference/lfe-docs/>
 
 ### Erlang Documentation
-- https://erlang.org/doc/
-- https://erlang.org/doc/man/httpc.html
-- https://erlang.org/doc/efficiency_guide/
+
+- <https://erlang.org/doc/>
+- <https://erlang.org/doc/man/httpc.html>
+- <https://erlang.org/doc/efficiency_guide/>
 
 ### Related Libraries
+
 - yuri: URL parsing (dependency)
 - rebar3_lfe: Build tool
 
 ### Getting Help
+
 - LFE Google Group
 - #lfe on Libera.Chat IRC
 - GitHub Issues
@@ -611,6 +699,7 @@ If you're using this library in other projects:
 ### Success Metrics
 
 The rewrite is successful if:
+
 - ✅ 25%+ overall performance improvement
 - ✅ 40%+ reduction in allocations
 - ✅ Zero breaking API changes can be worked around

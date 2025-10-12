@@ -12,7 +12,7 @@
      `#m(method get
          version ,(http:default-version)
          remote-addr #""
-         headers ,(http:default-headers)
+         headers #m()
          body #""
          url ,url
          url-parsed ,(maps:merge parsed-url (yuri.user:parse parsed-url))
@@ -23,7 +23,7 @@
   (new method url #""))
 
 (defun new (method url body)
-  (new method url body (http:default-headers)))
+  (new method url body #m()))
 
 (defun new (method url body headers)
   (let* ((init (new url))
