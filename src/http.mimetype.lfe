@@ -2100,3 +2100,92 @@
 (defun multipart/vnd.bint.med-plus () #"multipart/vnd.bint.med-plus")
 (defun multipart/voice-message () #"multipart/voice-message")
 (defun multipart/x-mixed-replace () #"multipart/x-mixed-replace")
+
+;;; ---------------------------------------------------------------------------
+;;; Helper Functions (Manually Added - Not Auto-generated)
+;;; ---------------------------------------------------------------------------
+;;; These functions provide convenience methods for looking up MIME types
+;;; by file extension or path.
+
+(defun mime-map ()
+  "Return a pre-built map of file extensions to MIME types.
+  This map is created once per call, consider caching if used frequently.
+
+  Returns:
+    Map of binary extensions to binary MIME types"
+  #m(;; Text formats
+     #"txt"  #"text/plain; charset=utf-8"
+     #"html" #"text/html; charset=utf-8"
+     #"htm"  #"text/html; charset=utf-8"
+     #"css"  #"text/css; charset=utf-8"
+     #"csv"  #"text/csv; charset=utf-8"
+     #"md"   #"text/markdown; charset=utf-8"
+
+     ;; Application formats
+     #"json" #"application/json; charset=utf-8"
+     #"xml"  #"application/xml; charset=utf-8"
+     #"js"   #"application/javascript; charset=utf-8"
+     #"pdf"  #"application/pdf"
+     #"zip"  #"application/zip"
+     #"gz"   #"application/gzip"
+     #"tar"  #"application/x-tar"
+     #"yaml" #"application/yaml"
+     #"yml"  #"application/yaml"
+
+     ;; Image formats
+     #"png"  #"image/png"
+     #"jpg"  #"image/jpeg"
+     #"jpeg" #"image/jpeg"
+     #"gif"  #"image/gif"
+     #"svg"  #"image/svg+xml"
+     #"webp" #"image/webp"
+     #"ico"  #"image/x-icon"
+
+     ;; Audio formats
+     #"mp3"  #"audio/mpeg"
+     #"wav"  #"audio/wav"
+     #"ogg"  #"audio/ogg"
+
+     ;; Video formats
+     #"mp4"  #"video/mp4"
+     #"webm" #"video/webm"
+     #"avi"  #"video/x-msvideo"
+
+     ;; Font formats
+     #"woff" #"font/woff"
+     #"woff2" #"font/woff2"
+     #"ttf"  #"font/ttf"
+     #"otf"  #"font/otf"))
+
+(defun from-extension
+  "Get MIME type from file extension.
+
+  Args:
+    ext: Binary file extension (without dot), e.g., #\"json\"
+
+  Returns:
+    Binary MIME type, or application/octet-stream if unknown"
+  ((ext) (when (is_binary ext))
+   (let ((ext-lower (http.util:binary-downcase ext)))
+     (maps:get ext-lower (mime-map) #"application/octet-stream")))
+  ((ext) (when (is_list ext))
+   (from-extension (list_to_binary ext)))
+  ((ext) (when (is_atom ext))
+   (from-extension (atom_to_binary ext))))
+
+(defun from-path
+  "Get MIME type from file path by extracting extension.
+
+  Args:
+    path: Binary file path, e.g., #\"/path/to/file.json\"
+
+  Returns:
+    Binary MIME type, or application/octet-stream if unknown"
+  ((path) (when (is_binary path))
+   (case (binary:split path #"." '(global))
+     ('() #"application/octet-stream")
+     (parts
+      (let ((ext (lists:last parts)))
+        (from-extension ext)))))
+  ((path) (when (is_list path))
+   (from-path (list_to_binary path))))
