@@ -1,0 +1,37 @@
+=== All HTTP Library Benchmarks ===
+Timestamp: 2025-10-13 16:12:04 UTC
+
+=== HTTP Util Benchmarks ===
+
+ensure-binary/1 performance:
+  Binary input: 1000000 iterations in 39004μs (39.00ns/op)
+  Atom input: 100000 iterations in 1575μs (15.75ns/op)
+  List input: 100000 iterations in 3692μs (36.92ns/op)
+
+binary-upcase/1 performance:
+  100000 iterations in 12441μs (124.41ns/op)
+
+query-string/1 performance:
+  Small map (3 params): 10000 iterations in 13149μs (1.31μs/op)
+  Larger map (10 params): 10000 iterations in 52654μs (5.27μs/op)
+
+=== HTTP Request Benchmarks ===
+
+Request construction performance:
+  new/1 (URL only): 10000 iterations in 13820μs (1.38μs/op)
+  new/2 (method + URL): 10000 iterations in 15192μs (1.52μs/op)
+  new/4 (full): 10000 iterations in 15480μs (1.55μs/op)
+
+Setter operations performance:
+  set-method: 100000 iterations in 14740μs (147.40ns/op)
+  set-body: 100000 iterations in 2666μs (26.66ns/op)
+  set-header: 100000 iterations in 3599μs (35.99ns/op)
+
+Helper functions performance:
+  set-json: 10000 iterations in 447μs (0.04μs/op)
+  add-query-param: 10000 iterations in 5708μs (0.57μs/op)
+
+=== HTTP Interop Benchmarks ===
+  ->erlang (GET): 10000 iterations in 442μs (0.04μs/op)
+  ->erlang (POST): 10000 iterations in 2685μs (0.27μs/op)
+  erlang->: 10000 iterations in 1140μs (0.11μs/op)

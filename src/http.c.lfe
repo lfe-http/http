@@ -1,4 +1,4 @@
-;;;; This module povides interoperability between the LFE HTP library and the
+;;;; This module provides interoperability between the LFE HTTP library and the
 ;;;; Erlang stdlib httpc HTTP client library.
 (defmodule http.c
   (export
@@ -6,110 +6,288 @@
    (erlang-> 1)
    (request 1) (request 2) (request 3) (request 4) (request 5) (request 6)))
 
-(defun request (url)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new url)))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+;;; ---------------------------------------------------------------------------
+;;; Public Request Functions
+;;; ---------------------------------------------------------------------------
 
-(defun request (method url)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new method url)))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+(defun request
+  "Make HTTP request with URL only (GET request).
 
-(defun request (method url body)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new method url body)))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+  Args:
+    url: Request URL (string or binary)
 
-(defun request (method url body headers)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new method url body headers)))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+  Returns:
+    #(ok response) or error tuple"
+  ((url)
+   (request-internal (http.request:new url))))
 
-(defun request (method url body http-options options)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new method url body)
-                http-options options))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+(defun request
+  "Make HTTP request with method and URL.
 
-(defun request (method url body headers http-options options)
-  (case (apply #'httpc:request/4
-               (->erlang
-                (http.request:new method url body headers)
-                http-options options))
-    (`#(ok ,r) (erlang-> r))
-    (err err)))
+  Args:
+    method: HTTP method (binary, atom, or string)
+    url: Request URL
 
-(defun ->erlang (req)
-  "Convert an LFE HTTP library request to args that can be supplied to Erlang's
-  `httpc:request/4` function."
-  (->erlang
-   req
-   ;; default Erlang httpc `HttpOptions`
-   `(#(version ,(http.util:http-version req)))
-   ;; default Erlang httpc `Options`
-   `(#(sync true) #(full_result true))))
+  Returns:
+    #(ok response) or error tuple"
+  ((method url)
+   (request-internal (http.request:new method url))))
 
-(defun ->erlang (req http-options options)
-  (->erlang (mref req 'method) req http-options options))
+(defun request
+  "Make HTTP request with method, URL, and body.
 
-(defun erlang-> (httpc-resp)
-  "Convert an Erlang HTTP client (httpc) response to an LFE HTTP library
-  response."
-  (let ((`#(,_ ,status-code ,_) (element 1 httpc-resp))
-        (headers (http.header:list->map (element 2 httpc-resp)))
-        (body (list_to_binary (element 3 httpc-resp))))
-    (http.response:new status-code headers body)))
+  Args:
+    method: HTTP method
+    url: Request URL
+    body: Request body
 
-;; Private functions
+  Returns:
+    #(ok response) or error tuple"
+  ((method url body)
+   (request-internal (http.request:new method url body))))
+
+(defun request
+  "Make HTTP request with method, URL, body, and headers.
+
+  Args:
+    method: HTTP method
+    url: Request URL
+    body: Request body
+    headers: Headers map
+
+  Returns:
+    #(ok response) or error tuple"
+  ((method url body headers)
+   (request-internal (http.request:new method url body headers))))
+
+(defun request
+  "Make HTTP request with HTTP options.
+
+  Args:
+    method: HTTP method
+    url: Request URL
+    body: Request body
+    http-options: Erlang httpc HTTP options
+    options: Erlang httpc options
+
+  Returns:
+    #(ok response) or error tuple"
+  ((method url body http-options options)
+   (let ((req (http.request:new method url body)))
+     (request-internal req http-options options))))
+
+(defun request
+  "Make HTTP request with headers and HTTP options.
+
+  Args:
+    method: HTTP method
+    url: Request URL
+    body: Request body
+    headers: Headers map
+    http-options: Erlang httpc HTTP options
+    options: Erlang httpc options
+
+  Returns:
+    #(ok response) or error tuple"
+  ((method url body headers http-options options)
+   (let ((req (http.request:new method url body headers)))
+     (request-internal req http-options options))))
+
+;;; ---------------------------------------------------------------------------
+;;; Internal Request Functions
+;;; ---------------------------------------------------------------------------
+
+(defun request-internal
+  "Internal request with default options.
+
+  Args:
+    req: LFE HTTP request map
+
+  Returns:
+    #(ok response) or error tuple"
+  ((req)
+   (request-internal req '() '())))
+
+(defun request-internal
+  "Internal request with HTTP options.
+
+  Args:
+    req: LFE HTTP request map
+    http-options: Erlang httpc HTTP options
+    options: Erlang httpc options
+
+  Returns:
+    #(ok response) or error tuple"
+  ((req http-options options)
+   (let* ((version (mref req 'version))
+          (version-tuple (http.util:http-version-tuple version))
+          ;; Merge version into http-options
+          (http-opts (cons `#(version ,version-tuple) http-options))
+          ;; Ensure sync and full_result
+          (opts (lists:append options '(#(sync true) #(full_result true))))
+          ;; Convert to Erlang format
+          (args (->erlang req http-opts opts)))
+     (case (apply #'httpc:request/4 args)
+       (`#(ok ,httpc-resp) `#(ok ,(erlang-> httpc-resp)))
+       (err err)))))
+
+;;; ---------------------------------------------------------------------------
+;;; LFE -> Erlang Conversion
+;;; ---------------------------------------------------------------------------
 
 (defun ->erlang
-  ;; Without body
-  (('delete req http-options options)
-   (->erlang-no-body 'delete req http-options options))
-  (('get req http-options options)
-   (->erlang-no-body 'get req http-options options))
-  (('head req http-options options)
-   (->erlang-no-body 'head req http-options options))
-  (('options req http-options options)
-   (->erlang-no-body 'options req http-options options))
-  (('trace req http-options options)
-   (->erlang-no-body 'trace req http-options options))
+  "Convert LFE HTTP request to Erlang httpc format with default options.
 
-  ;; With body
-  (('patch req http-options options)
-   (->erlang-with-body 'patch req http-options options))
-  (('post req http-options options)
-   (->erlang-with-body 'post req http-options options))
-  (('put req http-options options)
-   (->erlang-with-body 'put req http-options options)))
+  Args:
+    req: LFE HTTP request map
 
-(defun ->erlang-no-body (method req http-options options)
-  (let ((headers (mref req 'headers)))
-    (list
-     method
-     `#(,(mref req 'url)
-        ,(maps:to_list headers))
-     http-options
-     options)))
+  Returns:
+    List of arguments for httpc:request/4"
+  ((req)
+   (->erlang req
+             `(#(version ,(http.util:http-version-tuple (mref req 'version))))
+             '(#(sync true) #(full_result true)))))
 
-(defun ->erlang-with-body (method req http-options options)
-  (let ((headers (mref req 'headers)))
-    (list
-     method
-     `#(,(mref req 'url)
-        ,(maps:to_list headers)
-        ,(binary_to_list (maps:get #"Content-Type" headers (http.mimetype:text/html)))
-        ,(mref req 'body))
-     http-options
-     (lists:append options '(#(body_format binary))))))
+(defun ->erlang
+  "Convert LFE HTTP request to Erlang httpc format.
+
+  Args:
+    req: LFE HTTP request map
+    http-options: Erlang httpc HTTP options
+    options: Erlang httpc options
+
+  Returns:
+    List of arguments for httpc:request/4"
+  ((req http-options options)
+   (->erlang-dispatch (mref req 'method) req http-options options)))
+
+;;; ---------------------------------------------------------------------------
+;;; Binary Method Dispatch (Optimized)
+;;; ---------------------------------------------------------------------------
+
+(defun ->erlang-dispatch
+  "Dispatch on binary HTTP method for optimized conversion.
+  Uses binary pattern matching instead of atom comparison.
+
+  Args:
+    method: Binary HTTP method (e.g., #\"GET\")
+    req: Request map
+    http-options: HTTP options
+    options: Options
+
+  Returns:
+    List of arguments for httpc:request/4"
+  ;; Methods without body
+  ((#"GET" req http-opts opts)
+   (->erlang-no-body 'get req http-opts opts))
+  ((#"HEAD" req http-opts opts)
+   (->erlang-no-body 'head req http-opts opts))
+  ((#"DELETE" req http-opts opts)
+   (->erlang-no-body 'delete req http-opts opts))
+  ((#"OPTIONS" req http-opts opts)
+   (->erlang-no-body 'options req http-opts opts))
+  ((#"TRACE" req http-opts opts)
+   (->erlang-no-body 'trace req http-opts opts))
+
+  ;; Methods with body
+  ((#"POST" req http-opts opts)
+   (->erlang-with-body 'post req http-opts opts))
+  ((#"PUT" req http-opts opts)
+   (->erlang-with-body 'put req http-opts opts))
+  ((#"PATCH" req http-opts opts)
+   (->erlang-with-body 'patch req http-opts opts))
+
+  ;; Fallback for custom methods
+  ((method req http-opts opts)
+   (let ((method-atom (method->atom method)))
+     (if (http:method-has-body? method)
+       (->erlang-with-body method-atom req http-opts opts)
+       (->erlang-no-body method-atom req http-opts opts)))))
+
+;;; ---------------------------------------------------------------------------
+;;; Conversion Helpers
+;;; ---------------------------------------------------------------------------
+
+(defun ->erlang-no-body
+  "Convert request without body to Erlang format.
+  Optimized for single-pass conversion.
+
+  Args:
+    method-atom: Erlang method atom
+    req: Request map
+    http-options: HTTP options
+    options: Options
+
+  Returns:
+    List #(method url headers) http-options options"
+  ((method-atom req http-opts opts)
+   (let* ((url (mref req 'url))
+          (headers (mref req 'headers))
+          (header-list (maps:to_list headers)))
+     `(,method-atom
+       #(,url ,header-list)
+       ,http-opts
+       ,opts))))
+
+(defun ->erlang-with-body
+  "Convert request with body to Erlang format.
+  Optimized for single-pass conversion.
+
+  Args:
+    method-atom: Erlang method atom
+    req: Request map
+    http-options: HTTP options
+    options: Options
+
+  Returns:
+    List #(method url headers content-type body) http-options options"
+  ((method-atom req http-opts opts)
+   (let* ((url (mref req 'url))
+          (headers (mref req 'headers))
+          (header-list (maps:to_list headers))
+          (body (mref req 'body))
+          (content-type
+           (http.header:get headers #"Content-Type"
+                            #"application/octet-stream"
+                            #m(case-insensitive true))))
+     `(,method-atom
+       #(,url
+         ,header-list
+         ,(binary_to_list content-type)
+         ,body)
+       ,http-opts
+       ,(cons #(body_format binary) opts)))))
+
+(defun method->atom
+  "Convert binary method to lowercase atom for Erlang httpc.
+  Inline-optimized.
+
+  Args:
+    method: Binary HTTP method
+
+  Returns:
+    Lowercase atom"
+  ((method) (when (is_binary method))
+   (http.util:binary-downcase-atom method)))
+
+;;; ---------------------------------------------------------------------------
+;;; Erlang -> LFE Conversion
+;;; ---------------------------------------------------------------------------
+
+(defun erlang->
+  "Convert Erlang httpc response to LFE HTTP response.
+  Single-pass conversion with optimized header handling.
+
+  Args:
+    httpc-resp: Erlang httpc response tuple
+
+  Returns:
+    LFE HTTP response map"
+  ((httpc-resp)
+   (let ((`#(#(,_version ,sc ,_reason-phrase) ,header-list ,body-data)
+          httpc-resp))
+     ;; Direct map construction - single pass
+     `#m(status ,sc
+         headers ,(http.header:from-list header-list)
+         body ,(iolist_to_binary body-data)
+         version 1.1))))
