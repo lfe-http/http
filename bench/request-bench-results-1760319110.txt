@@ -1,0 +1,17 @@
+=== HTTP Request Benchmarks ===
+Timestamp: 2025-10-13 01:31:50 UTC
+
+
+Request construction performance:
+  new/1 (URL only): 10000 iterations in 21085μs (2.11μs/op)
+  new/2 (method + URL): 10000 iterations in 15228μs (1.52μs/op)
+  new/4 (full): 10000 iterations in 15413μs (1.54μs/op)
+
+Setter operations performance:
+  set-method: 100000 iterations in 14170μs (141.70ns/op)
+  set-body: 100000 iterations in 3204μs (32.04ns/op)
+  set-header: 100000 iterations in 6027μs (60.27ns/op)
+
+Helper functions performance:
+  set-json: 10000 iterations in 475μs (0.05μs/op)
+  add-query-param: 10000 iterations in 6048μs (0.60μs/op)
