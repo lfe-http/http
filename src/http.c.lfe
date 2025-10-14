@@ -11,13 +11,15 @@
 ;;; ---------------------------------------------------------------------------
 
 (defun request
-  "Make HTTP request with URL only (GET request).
+  "Make HTTP request with a pre-built request map or URL.
 
   Args:
-    url: Request URL (string or binary)
+    req-or-url: Request map (from http.request:new or builder functions) OR URL string/binary
 
   Returns:
     #(ok response) or error tuple"
+  ((req) (when (is_map req))
+   (request-internal req))
   ((url)
    (request-internal (http.request:new url))))
 
@@ -119,10 +121,14 @@
   Returns:
     #(ok response) or error tuple"
   ((req http-options options)
-   (let* ((version (mref req 'version))
-          (version-tuple (http.util:http-version-tuple version))
-          ;; Merge version into http-options
-          (http-opts (cons `#(version ,version-tuple) http-options))
+   (let* (;; Add default timeouts and SSL options if not specified
+          (ssl-opts (get-default-ssl-options))
+          (default-http-opts `(#(timeout 30000)
+                               #(connect_timeout 10000)
+                               #(ssl ,ssl-opts)))
+          ;; Merge user options with defaults (user options take precedence)
+          ;; NOTE: DO NOT add version option - it causes {error,closed} in OTP 28!
+          (http-opts (lists:append http-options default-http-opts))
           ;; Ensure sync and full_result
           (opts (lists:append options '(#(sync true) #(full_result true))))
           ;; Convert to Erlang format
@@ -144,9 +150,8 @@
   Returns:
     List of arguments for httpc:request/4"
   ((req)
-   (->erlang req
-             `(#(version ,(http.util:http-version-tuple (mref req 'version))))
-             '(#(sync true) #(full_result true)))))
+   ;; NOTE: Do not add version option - causes issues in OTP 28
+   (->erlang req '() '(#(sync true) #(full_result true)))))
 
 (defun ->erlang
   "Convert LFE HTTP request to Erlang httpc format.
@@ -223,7 +228,7 @@
   ((method-atom req http-opts opts)
    (let* ((url (mref req 'url))
           (headers (mref req 'headers))
-          (header-list (maps:to_list headers)))
+          (header-list (headers-to-string-list headers)))
      `(,method-atom
        #(,url ,header-list)
        ,http-opts
@@ -244,7 +249,7 @@
   ((method-atom req http-opts opts)
    (let* ((url (mref req 'url))
           (headers (mref req 'headers))
-          (header-list (maps:to_list headers))
+          (header-list (headers-to-string-list headers))
           (body (mref req 'body))
           (content-type
            (http.header:get headers #"Content-Type"
@@ -269,6 +274,37 @@
     Lowercase atom"
   ((method) (when (is_binary method))
    (http.util:binary-downcase-atom method)))
+
+(defun headers-to-string-list
+  "Convert headers map (with binary keys/values) to httpc format.
+  httpc requires: headers() = [{field(), value()}]
+  where field() = string() and value() = binary() | iolist()
+
+  Per Erlang docs, header keys must be strings but values can be binaries.
+
+  Args:
+    headers: Map with binary keys and values
+
+  Returns:
+    List of {string, binary} tuples"
+  ((headers) (when (is_map headers))
+   (lists:map
+     (lambda (header-tuple)
+       (let ((`#(,key ,val) header-tuple))
+         ;; Key must be string, value can stay binary
+         `#(,(binary_to_list key) ,val)))
+     (maps:to_list headers))))
+
+(defun get-default-ssl-options
+  "Get default SSL options for HTTPS requests.
+  Uses relaxed verification for better compatibility with various servers.
+
+  Returns:
+    List of SSL options for ssl:connect"
+  (()
+   ;; Relaxed SSL verification - more permissive but works with more servers
+   ;; For production use, consider using httpc:ssl_verify_host_options(true)
+   '(#(verify verify_none))))
 
 ;;; ---------------------------------------------------------------------------
 ;;; Erlang -> LFE Conversion
