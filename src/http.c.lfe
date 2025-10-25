@@ -123,8 +123,8 @@
   ((req http-options options)
    (let* (;; Add default timeouts and SSL options if not specified
           (ssl-opts (get-default-ssl-options))
-          (default-http-opts `(#(timeout 30000)
-                               #(connect_timeout 10000)
+          (default-http-opts `(#(timeout 60000)
+                               #(connect_timeout 20000)
                                #(ssl ,ssl-opts)))
           ;; Merge user options with defaults (user options take precedence)
           ;; NOTE: DO NOT add version option - it causes {error,closed} in OTP 28!
@@ -278,21 +278,21 @@
 (defun headers-to-string-list
   "Convert headers map (with binary keys/values) to httpc format.
   httpc requires: headers() = [{field(), value()}]
-  where field() = string() and value() = binary() | iolist()
+  where field() = string() (lowercase) and value() = binary() | iolist()
 
-  Per Erlang docs, header keys must be strings but values can be binaries.
+  Per Erlang httpc docs, header field names should be lowercase strings.
 
   Args:
     headers: Map with binary keys and values
 
   Returns:
-    List of {string, binary} tuples"
+    List of {lowercase-string, binary} tuples"
   ((headers) (when (is_map headers))
    (lists:map
      (lambda (header-tuple)
        (let ((`#(,key ,val) header-tuple))
-         ;; Key must be string, value can stay binary
-         `#(,(binary_to_list key) ,val)))
+         ;; Key must be lowercase string, value can stay binary
+         `#(,(binary_to_list (http.util:binary-downcase key)) ,val)))
      (maps:to_list headers))))
 
 (defun get-default-ssl-options
