@@ -22,11 +22,28 @@
     (is-equal 'true (lists:member 'get methods))
     (is-equal 'true (lists:member 'post methods))))
 
-(deftest versions
-  (let ((versions (http:versions)))
+(deftest supported-versions
+  (let ((versions (http:supported-versions)))
     (is-equal 'true (is_list versions))
     (is-equal 'true (lists:member 1.1 versions))
     (is-equal 'true (lists:member 2 versions))))
+
+(deftest version
+  ;; Test version function that returns the http library version
+  (let ((version (http:version)))
+    (is-equal "1.0.0" version)))
+
+(deftest versions
+  ;; Test versions function that returns all application version info
+  (let ((versions (http:versions)))
+    (is-equal '(architecture
+                driver
+                emulator
+                erlang
+                lfe
+                rebar
+                rebar3_lfe
+                yuri) (lists:sort (proplists:get_keys versions)))))
 
 ;;; ---------------------------------------------------------------------------
 ;;; Binary method API tests

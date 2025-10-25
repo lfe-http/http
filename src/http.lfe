@@ -4,12 +4,12 @@
    (default-headers 0)
    (default-version 0)
    (methods 0)
-   (versions 0)
-
-   ;; New binary method utilities
+   (supported-versions 0)
    (valid-method? 1)
    (normalize-method 1)
-   (method-has-body? 1)))
+   (method-has-body? 1)
+   (version 0)
+   (versions 0)))
 
 ;;; ---------------------------------------------------------------------------
 ;;; HTTP Method Constants (Macros for compile-time optimization)
@@ -52,7 +52,7 @@
     List of method atoms"
   '(delete get head options patch post put trace connect))
 
-(defun versions ()
+(defun supported-versions ()
   "Return list of supported HTTP versions.
 
   Returns:
@@ -113,3 +113,9 @@
   ((#"PATCH") 'true)
   ((#"DELETE") 'false)  ; Usually no body, but can have one
   ((_) 'false))
+
+(defun version ()
+  (http.vsn:get))
+
+(defun versions ()
+  (http.vsn:all))
