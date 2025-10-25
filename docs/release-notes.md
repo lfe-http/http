@@ -151,11 +151,140 @@ Requests now include parsed fields like `path-segments` and `query-parsed`. Use 
 
 ---
 
-## [0.5.4] - 2024
+## [0.5.4] - 2024-02-17
 
 Last version before the v1.0.0 rewrite. Used atom-based method names and had performance limitations that were addressed in the rewrite.
 
 ---
 
+## [0.5.3] - 2024-02-14
+
+### Added
+
+- Response body convenience function for easier access to response content
+
+### Changed
+
+- Minor improvements to response handling
+
+---
+
+## [0.5.2] - 2024-02-14
+
+### Fixed
+
+- Fixed bad initial response headers initialization
+
+### Changed
+
+- Improved response header handling reliability
+
+---
+
+## [0.5.1] - 2024-02-14
+
+### Added
+
+- Request and response convenience functions (`req` and `resp`)
+- Enhanced feature list documentation
+
+### Changed
+
+- Updated README with new features
+- Improved code formatting
+
+---
+
+## [0.5.0] - 2024-02-12
+
+### Changed
+
+- Consolidated all Erlang httpc-related code into `http.c.lfe` module
+- Major request module cleanup and refactoring
+- Improved code organization
+
+### Fixed
+
+- Fixed LFE syntax error in README
+
+### Documentation
+
+- Documentation tweaks and improvements
+
+---
+
+## [0.4.0] - 2024-02-12
+
+### Added
+
+- Response compatibility with Erlang stdlib's httpc
+- Request compatibility with Erlang stdlib's httpc
+- Full interoperability with Erlang's HTTP client
+
+### Changed
+
+- Switched to use the same HTTP method atoms as Erlang for better compatibility
+
+---
+
+## [0.3.0] - 2024-02-11
+
+### Added
+
+- Response module for handling HTTP responses
+- Remote address (`remote-addr`) field to request map
+- Auto-generation capabilities for library modules and functions
+- Lisp-oriented HTTP errors
+
+### Changed
+
+- Updated to latest version of LFE
+- Updated dependencies including yuri library
+- Improved request testing with updated yuri library
+- Updated supported Erlang versions
+
+### Documentation
+
+- Comprehensive documentation updates
+- Updated repository links
+- Added auto-generation caveats
+
+---
+
+## [0.2.0] - 2023-07-13
+
+### Added
+
+- Header support for HTTP requests
+- MIME types CSV data
+- HTTP methods functionality
+- Header fields data (CSV)
+- Basic request abstraction
+
+### Changed
+
+- Moved library metadata into separate file to avoid naming conflicts
+- Added missing exports
+
+---
+
+## [0.1.0] - 2023-07-12
+
+### Added
+
+- Initial release of LFE HTTP library
+- Basic HTTP functionality
+- Core library structure
+
+---
+
 [1.0.0]: https://github.com/lfe-http/http/releases/tag/v1.0.0
 [0.5.4]: https://github.com/lfe-http/http/releases/tag/v0.5.4
+[0.5.3]: https://github.com/lfe-http/http/releases/tag/v0.5.3
+[0.5.2]: https://github.com/lfe-http/http/releases/tag/v0.5.2
+[0.5.1]: https://github.com/lfe-http/http/releases/tag/v0.5.1
+[0.5.0]: https://github.com/lfe-http/http/releases/tag/v0.5.0
+[0.4.0]: https://github.com/lfe-http/http/releases/tag/v0.4.0
+[0.3.0]: https://github.com/lfe-http/http/releases/tag/v0.3.0
+[0.2.0]: https://github.com/lfe-http/http/releases/tag/v0.2.0
+[0.1.0]: https://github.com/lfe-http/http/releases/tag/v0.1.0
