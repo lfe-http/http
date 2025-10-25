@@ -34,6 +34,8 @@ jobs:
     #  run: rebar3 xref
     # - name: Dialyzer
     #   run: rebar3 dialyzer
+    - name: Clean Build
+      run: rebar3 clean
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
@@ -65,6 +67,8 @@ jobs:
     #  run: rebar3 xref
     # - name: Dialyzer
     #   run: rebar3 dialyzer
+    - name: Clean Build
+      run: rebar3 clean
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
