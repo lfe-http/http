@@ -1,5 +1,5 @@
 (defmodule integration-tests
-  (behaviour ltest-unit))
+  (behaviour ltest-integration))
 
 (include-lib "ltest/include/ltest-macros.lfe")
 
