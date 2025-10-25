@@ -125,3 +125,75 @@
   (let* ((req (http.request:new #"POST" #"http://example.com" #"body"))
          (`(,_ #(,_ ,_ ,content-type ,_) ,_ ,_) (http.c:->erlang req)))
     (is-equal "application/octet-stream" content-type)))
+
+;;; ---------------------------------------------------------------------------
+;;; Additional Method Dispatch Tests
+;;; ---------------------------------------------------------------------------
+
+(deftest method-dispatch-options
+  (let* ((req (http.request:new #"OPTIONS" #"http://example.com"))
+         (`(,method #(,_ ,_) ,_ ,_) (http.c:->erlang req)))
+    (is-equal 'options method)))
+
+(deftest method-dispatch-trace
+  (let* ((req (http.request:new #"TRACE" #"http://example.com"))
+         (`(,method #(,_ ,_) ,_ ,_) (http.c:->erlang req)))
+    (is-equal 'trace method)))
+
+;;; ---------------------------------------------------------------------------
+;;; Options Merging Tests (via ->erlang/3)
+;;; ---------------------------------------------------------------------------
+
+(deftest user-http-options-passed-through
+  (let* ((req (http.request:new #"GET" #"https://httpbin.org/get"))
+         (user-http-opts '(#(timeout 5000)))
+         (`(,_ ,_ ,http-opts ,_) (http.c:->erlang req user-http-opts '())))
+    ;; User options should be present
+    (is-equal 'true (lists:member #(timeout 5000) http-opts))))
+
+(deftest user-general-options-passed-through
+  (let* ((req (http.request:new #"GET" #"https://httpbin.org/get"))
+         (user-opts '(#(stream self)))
+         (`(,_ ,_ ,_ ,opts) (http.c:->erlang req '() user-opts)))
+    ;; User options should be present along with defaults
+    (is-equal 'true (lists:member #(stream self) opts))))
+
+(deftest sync-and-full-result-in-options
+  (let* ((req (http.request:new #"GET" #"https://httpbin.org/get"))
+         (`(,_ ,_ ,_ ,opts) (http.c:->erlang req)))
+    ;; Check sync and full_result are present
+    (is-equal 'true (lists:member #(sync true) opts))
+    (is-equal 'true (lists:member #(full_result true) opts))))
+
+;;; ---------------------------------------------------------------------------
+;;; Header Edge Cases Tests
+;;; ---------------------------------------------------------------------------
+
+(deftest empty-headers
+  (let* ((req (http.request:new #"GET" #"https://httpbin.org/get"))
+         (`(,_ #(,_ ,header-list) ,_ ,_) (http.c:->erlang req)))
+    ;; Empty headers should result in empty list
+    (is-equal '() header-list)))
+
+(deftest header-keys-lowercase
+  (let* ((headers #m(#"User-Agent" #"test" #"Content-Type" #"application/json"))
+         (req (http.request:new #"POST" #"https://httpbin.org/post" #"body" headers))
+         (`(,_ #(,_ ,header-list ,_ ,_) ,_ ,_) (http.c:->erlang req)))
+    ;; All header keys should be lowercase strings
+    (is-equal 'true (lists:all
+                      (lambda (header)
+                        (let ((`#(,key ,_) header))
+                          (andalso (is_list key)
+                                   (== key (string:lowercase key)))))
+                      header-list))))
+
+(deftest header-values-binary
+  (let* ((headers #m(#"X-Custom" #"value"))
+         (req (http.request:new #"GET" #"https://httpbin.org/get" #"" headers))
+         (`(,_ #(,_ ,header-list) ,_ ,_) (http.c:->erlang req)))
+    ;; Header values should remain binary
+    (is-equal 'true (lists:all
+                      (lambda (header)
+                        (let ((`#(,_ ,val) header))
+                          (is_binary val)))
+                      header-list))))
