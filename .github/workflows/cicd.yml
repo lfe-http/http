@@ -35,7 +35,7 @@ jobs:
     # - name: Dialyzer
     #   run: rebar3 dialyzer
     - name: Clean Build
-      run: rebar3 clean
+      run: rm -rf _build && rebar3 clean
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
@@ -68,7 +68,7 @@ jobs:
     # - name: Dialyzer
     #   run: rebar3 dialyzer
     - name: Clean Build
-      run: rebar3 clean
+      run: rm -rf _build && rebar3 clean
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
