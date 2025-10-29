@@ -4,7 +4,7 @@
    (all 0)))
 
 (defun get ()
-  (get 'http))
+  (http.vsn:get 'http))
 
 (defun get (app-name)
   (application:load app-name)
@@ -16,7 +16,7 @@
   `#(architecture ,(erlang:system_info 'system_architecture)))
 
 (defun version+name (app-name)
-  `#(,app-name ,(get app-name)))
+  `#(,app-name ,(http.vsn:get app-name)))
 
 (defun versions-rebar ()
   `(,(version+name 'rebar)
